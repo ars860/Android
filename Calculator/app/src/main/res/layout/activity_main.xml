@@ -56,7 +56,6 @@
         android:text="@string/run_button"
         android:layout_marginBottom="5dp"
         android:textSize = "20sp"
-        android:background="@drawable/gradient"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

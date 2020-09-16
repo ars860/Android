@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.mariuszgromada.math.mxparser.Expression
 import kotlin.math.max
 
-
 enum class ButtonType { BUTTON, CHECKBOX, SWITCH }
 enum class KeyboardType { NUMBERS, ACTIONS }
 
