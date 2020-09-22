@@ -28,19 +28,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        style="@style/shadowText"
         android:id="@+id/picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/this_is_fine"
         android:gravity="center_horizontal|bottom"
-        android:shadowColor="@android:color/black"
-        android:shadowDx="1.5"
-        android:shadowDy="1.3"
-        android:shadowRadius="1.6"
-        android:singleLine="false"
         android:text="24 °C\nWeather is totally FINE\n"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/status2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
