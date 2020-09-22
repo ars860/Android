@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?colorPrimary"
+        tools:context=".MainActivity">
+
+
+        <TextView
+            android:id="@+id/header"
+            style="@style/shadowText.blackWhite"
+            android:layout_width="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:text="Weather"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/status2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/picture"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+        <Switch
+            android:id="@+id/themeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dark theme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/header"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/picture"
+            style="@style/shadowText.blackWhite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/this_is_fine"
+            android:gravity="center_horizontal|bottom"
+            android:text="24 °C\nWeather is totally FINE\n"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/status1"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/status1"
+            style="@style/statusSquare"
+            android:drawableTop="@drawable/wind"
+            android:text="78\nWind Flow"
+            app:layout_constraintBaseline_toBaselineOf="@id/status2"
+            app:layout_constraintEnd_toStartOf="@id/status2"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/picture" />
+
+        <TextView
+            android:id="@+id/status2"
+            style="@style/statusSquare"
+            android:drawableTop="@drawable/drops"
+            android:text="89\nHumidity"
+            app:layout_constraintBottom_toTopOf="@+id/bottomStatus3"
+            app:layout_constraintEnd_toStartOf="@+id/status3"
+            app:layout_constraintStart_toEndOf="@+id/status1"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <TextView
+            android:id="@+id/status3"
+            style="@style/statusSquare"
+            android:drawableTop="@drawable/lightning"
+            android:text="100\nLightnings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/status2"
+            app:layout_constraintBaseline_toBaselineOf="@id/status2" />
+
+        <TextView
+            android:id="@+id/bottomStatus1"
+            style="@style/statusSquare.small"
+            android:drawableTop="@drawable/sun"
+            android:text="Sunny\n12 pm"
+            app:layout_constraintBaseline_toBaselineOf="@id/bottomStatus2"
+            app:layout_constraintEnd_toStartOf="@+id/bottomStatus2"
+            app:layout_constraintStart_toEndOf="@+id/picture" />
+
+        <TextView
+            style="@style/statusSquare.small"
+            android:id="@+id/bottomStatus2"
+            android:drawableTop="@drawable/sunset"
+            android:text="Cloudy\n1 pm"
+            app:layout_constraintBaseline_toBaselineOf="@id/bottomStatus3"
+            app:layout_constraintEnd_toStartOf="@id/bottomStatus3"
+            app:layout_constraintStart_toEndOf="@+id/bottomStatus1" />
+
+        <TextView
+            style="@style/statusSquare.small"
+            android:id="@+id/bottomStatus3"
+            android:drawableTop="@drawable/rain"
+            android:text="Rainy\n2 pm"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bottomStatus4"
+            app:layout_constraintStart_toEndOf="@+id/bottomStatus2"
+            app:layout_constraintTop_toBottomOf="@+id/status2" />
+
+        <TextView
+            style="@style/statusSquare.small"
+            android:id="@+id/bottomStatus4"
+            android:drawableTop="@drawable/storm"
+            android:text="Stormy\n4 pm"
+            app:layout_constraintBaseline_toBaselineOf="@id/bottomStatus3"
+            app:layout_constraintEnd_toStartOf="@+id/bottomStatus5"
+            app:layout_constraintStart_toEndOf="@+id/bottomStatus3" />
+
+        <TextView
+            style="@style/statusSquare.small"
+            android:id="@+id/bottomStatus5"
+            android:drawableTop="@drawable/meteor"
+            android:text="The End\n7 pm"
+            app:layout_constraintBaseline_toBaselineOf="@id/bottomStatus3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bottomStatus4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
