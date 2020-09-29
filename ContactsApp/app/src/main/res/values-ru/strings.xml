@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ContactsApp</string>
+    <plurals name="on_get_contacts_success">
+        <item quantity="one">Успех! Доступен %d контакт.</item>
+        <item quantity="few">Успех! Доступно %d контакта.</item>
+        <item quantity="many">Успех! Доступно %d контактов.</item>
+    </plurals>
+    <string name="on_get_contacts_failure">Нет разрешения на доступ к контактам!</string>
+    <string name="on_call_failure">Нет разрешения на доступ к звонилке!</string>
+</resources>

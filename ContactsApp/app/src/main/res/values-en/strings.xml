@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ContactsApp</string>
+    <plurals name="on_get_contacts_success">
+        <item quantity="one">Success! Loaded %d contact!</item>
+        <item quantity="other">Success! Loaded %d contacts!</item>
+    </plurals>
+    <string name="on_get_contacts_failure">Don\'t have permission to load contacts.</string>
+    <string name="on_call_failure">Don\'t have permission to call.</string>
+</resources>
