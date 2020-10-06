@@ -27,6 +27,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.atomic.AtomicReference
 
+
+const val MAX_BITMAP_SIZE = 3000
 const val ACTION_LOAD_IMAGE_IN = "com.example.imageslist.action.LOAD_IMAGE_IN"
 const val ACTION_LOAD_IMAGE_OUT = "com.example.imageslist.action.LOAD_IMAGE_OUT"
 const val ACTION_MARK_LOADED = "dsadasdsad"
@@ -214,15 +216,15 @@ class MainActivity : AppCompatActivity() {
                     val (newHeight, newWidth) = with(bitmap) {
                         if (height > width) {
                             Pair(
-                                height.coerceAtMost(MyIntentService.MAX_BITMAP_SIZE),
+                                height.coerceAtMost(MAX_BITMAP_SIZE),
                                 (height.coerceAtMost(
-                                    MyIntentService.MAX_BITMAP_SIZE
+                                    MAX_BITMAP_SIZE
                                 ) * aspectRatio).toInt()
                             )
                         } else {
                             Pair(
-                                (width.coerceAtMost(MyIntentService.MAX_BITMAP_SIZE) / aspectRatio).toInt(),
-                                width.coerceAtMost(MyIntentService.MAX_BITMAP_SIZE)
+                                (width.coerceAtMost(MAX_BITMAP_SIZE) / aspectRatio).toInt(),
+                                width.coerceAtMost(MAX_BITMAP_SIZE)
                             )
                         }
                     }
