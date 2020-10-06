@@ -59,12 +59,12 @@ class ImageRowAdapter(
                     loading = true
                     notifyItemChanged(holder.adapterPosition)
 
-                    DownloadImagesTask(
-                        url,
-                        holder.adapterPosition,
-                        WeakReference(this@ImageRowAdapter)
-                    ).execute()
-//                    MyIntentService.startLoadImage(parent.context, url, holder.adapterPosition)
+//                    DownloadImagesTask(
+//                        url,
+//                        holder.adapterPosition,
+//                        WeakReference(this@ImageRowAdapter)
+//                    ).execute()
+                    MyIntentService.startLoadImage(parent.context, url, holder.adapterPosition)
                 } else {
                     loaded = false
                     bitmap?.recycle()
