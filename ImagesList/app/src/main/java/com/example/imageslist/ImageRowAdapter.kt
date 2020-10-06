@@ -72,10 +72,13 @@ class ImageRowAdapter(
                         holder.adapterPosition,
                         applicationContext
                     ).apply { execute() }
-//                    MyIntentService.startLoadImage(parent.context, url, holder.adapterPosition)
                 } else {
                     loaded = false
-                    bitmap?.recycle()
+                    synchronized(lruCache) {
+                        if (lruCache[url] == null) {
+                            bitmap?.recycle()
+                        }
+                    }
                     bitmap = null
                     notifyItemChanged(holder.adapterPosition)
                 }

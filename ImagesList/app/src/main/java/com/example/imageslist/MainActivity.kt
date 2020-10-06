@@ -8,10 +8,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
+import android.util.LruCache
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.set
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -29,8 +28,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 
 const val MAX_BITMAP_SIZE = 3000
-const val ACTION_LOAD_IMAGE_IN = "com.example.imageslist.action.LOAD_IMAGE_IN"
-const val ACTION_LOAD_IMAGE_OUT = "com.example.imageslist.action.LOAD_IMAGE_OUT"
+const val ACTION_LOAD_IMAGE = "com.example.imageslist.action.LOAD_IMAGE_OUT"
 const val ACTION_MARK_LOADED = "dsadasdsad"
 
 const val URL_TAG = "com.example.imageslist.extra.URL"
@@ -40,6 +38,8 @@ var isMultiLoad = false
 
 val bitmap_atomic: AtomicReference<Bitmap?> = AtomicReference(null)
 val map: ConcurrentMap<String, Bitmap> = ConcurrentHashMap()
+
+val lruCache: LruCache<String, Bitmap> = LruCache(5)
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             adapter = ImageRowAdapter(imageRows, WeakReference(applicationContext))
         }
 
-        val filter = IntentFilter(ACTION_LOAD_IMAGE_OUT).apply { addAction(ACTION_MARK_LOADED) }
+        val filter = IntentFilter(ACTION_LOAD_IMAGE).apply { addAction(ACTION_MARK_LOADED) }
         filter.addCategory(Intent.CATEGORY_DEFAULT)
         registerReceiver(receiver, filter)
     }
@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
     inner class ResponseReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
-                ACTION_LOAD_IMAGE_OUT -> {
+                ACTION_LOAD_IMAGE -> {
                     val position = intent.getIntExtra(POSITION_TAG, -1)
                     val url = intent.getStringExtra(URL_TAG)
 
@@ -179,12 +179,12 @@ class MainActivity : AppCompatActivity() {
                     loading = false
                     loaded = true
 
-                    recyclerView.adapter?.notifyItemChanged(position)
-
                     if (!isMultiLoad) {
                         val showImageIntent = Intent(this@MainActivity, ShowImage::class.java)
                         startActivity(showImageIntent)
                     }
+
+                    recyclerView.adapter?.notifyItemChanged(position)
                 }
             }
         }
@@ -200,15 +200,44 @@ class MainActivity : AppCompatActivity() {
 
     class DownloadImagesTask(
         private val url: String,
-        val position: Int,
+        private val position: Int,
         private val context: WeakReference<Context>
     ) :
         AsyncTask<Unit, Unit, Unit>() {
         private var stream: BufferedInputStream? = null
 
+        private fun broadcastResult(bitmap: Bitmap) {
+            synchronized(lruCache) {
+                lruCache.put(url, bitmap)
+            }
+
+            val broadcastIntent = Intent()
+            broadcastIntent.action = ACTION_LOAD_IMAGE
+            broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT)
+            broadcastIntent.putExtra(URL_TAG, url)
+            broadcastIntent.putExtra(POSITION_TAG, position)
+
+            if (!isCancelled) {
+                if (!isMultiLoad){
+                    bitmap_atomic.set(bitmap)
+                } else {
+                    map[url] = bitmap
+                }
+                context.get()?.sendBroadcast(broadcastIntent)
+            }
+        }
+
         override fun doInBackground(vararg params: Unit?) {
-            stream = BufferedInputStream(URL(url).openStream())
             try {
+                synchronized(lruCache) {
+                    if (lruCache[url] != null) {
+                        broadcastResult(lruCache[url])
+                        return
+                    }
+                }
+
+                stream = BufferedInputStream(URL(url).openStream())
+
                 stream.use {
                     val bitmap = BitmapFactory.decodeStream(it)
 
@@ -233,21 +262,7 @@ class MainActivity : AppCompatActivity() {
                         newWidth, newHeight, true
                     )
 
-
-                    val broadcastIntent = Intent()
-                    broadcastIntent.action = ACTION_LOAD_IMAGE_OUT
-                    broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT)
-                    broadcastIntent.putExtra(URL_TAG, url)
-                    broadcastIntent.putExtra(POSITION_TAG, position)
-
-                    if (!isCancelled) {
-                        if (!isMultiLoad){
-                            bitmap_atomic.set(scaledBitmap)
-                        } else {
-                            map[url] = scaledBitmap
-                        }
-                        context.get()?.sendBroadcast(broadcastIntent)
-                    }
+                    broadcastResult(scaledBitmap)
                 }
             } catch (e: Exception) {
                 // nothing
