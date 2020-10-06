@@ -9,13 +9,6 @@ import java.net.URL
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-private const val ACTION_LOAD_IMAGE_IN = "com.example.imageslist.action.LOAD_IMAGE_IN"
-const val ACTION_LOAD_IMAGE_OUT = "com.example.imageslist.action.LOAD_IMAGE_OUT"
-
-const val URL_TAG = "com.example.imageslist.extra.URL"
-
-val map: ConcurrentMap<String, Bitmap> = ConcurrentHashMap()
-
 class MyIntentService : IntentService("MyIntentService") {
     override fun onHandleIntent(intent: Intent?) {
         val url = intent?.getStringExtra(URL_TAG)

@@ -1,5 +1,6 @@
 package com.example.imageslist
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
@@ -23,8 +24,11 @@ data class ImageRow(
 )
 
 class ImageRowAdapter(
-    private val imageRows: List<ImageRow>
+    private val imageRows: List<ImageRow>,
+    private val applicationContext: WeakReference<Context>
 ) : RecyclerView.Adapter<ImageRowAdapter.ImageRowViewHolder>() {
+    private var currentTask: MainActivity.DownloadImagesTask? = null
+
     class ImageRowViewHolder(val root: View) : RecyclerView.ViewHolder(root) {
         fun bind(imageRow: ImageRow) {
             with(root) {
@@ -59,12 +63,16 @@ class ImageRowAdapter(
                     loading = true
                     notifyItemChanged(holder.adapterPosition)
 
-//                    DownloadImagesTask(
-//                        url,
-//                        holder.adapterPosition,
-//                        WeakReference(this@ImageRowAdapter)
-//                    ).execute()
-                    MyIntentService.startLoadImage(parent.context, url, holder.adapterPosition)
+                    if (!isMultiLoad){
+                        currentTask?.cancel(false)
+                    }
+
+                    currentTask = MainActivity.DownloadImagesTask(
+                        url,
+                        holder.adapterPosition,
+                        applicationContext
+                    ).apply { execute() }
+//                    MyIntentService.startLoadImage(parent.context, url, holder.adapterPosition)
                 } else {
                     loaded = false
                     bitmap?.recycle()
@@ -82,45 +90,8 @@ class ImageRowAdapter(
     override fun onBindViewHolder(holder: ImageRowViewHolder, position: Int) =
         holder.bind(imageRows[position])
 
-    class DownloadImagesTask(val url: String, val position: Int, val activity : WeakReference<ImageRowAdapter>) :
-        AsyncTask<Unit, Unit, Bitmap>() {
-        override fun doInBackground(vararg params: Unit?): Bitmap {
-            URL(url).openStream().use {
-                val bitmap = BitmapFactory.decodeStream(it)
 
-                val aspectRatio = bitmap.width.toDouble() / bitmap.height.toDouble()
-                val (newHeight, newWidth) = with(bitmap) {
-                    if (height > width) {
-                        Pair(
-                            height.coerceAtMost(MyIntentService.MAX_BITMAP_SIZE), (height.coerceAtMost(
-                                MyIntentService.MAX_BITMAP_SIZE
-                            ) * aspectRatio).toInt()
-                        )
-                    } else {
-                        Pair(
-                            (width.coerceAtMost(MyIntentService.MAX_BITMAP_SIZE) / aspectRatio).toInt(),
-                            width.coerceAtMost(MyIntentService.MAX_BITMAP_SIZE)
-                        )
-                    }
-                }
-                return Bitmap.createScaledBitmap(
-                    bitmap,
-                    newWidth, newHeight, true
-                )
-            }
-        }
-
-        override fun onPostExecute(result: Bitmap?) {
-            map[url] = result
-            activity.get()?.addBitmap(url, position)
-        }
-
-        override fun onCancelled() {
-            super.onCancelled()
-        }
-    }
-
-    fun addBitmap(url: String, position : Int) {
+    fun addBitmap(url: String, position: Int) {
         with(imageRows[position]) {
             if (!loaded) {
                 this.bitmap = map[url]
