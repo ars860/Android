@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ImagesList</string>
+    <plurals name="on_get_contacts_success">
+        <item quantity="one">Success! Loaded %d image!</item>
+        <item quantity="other">Success! Loaded %d images!</item>
+    </plurals>
+    <string name="on_use_internet_failure">Don\'t have permission to use internet.</string>
+    <string name="on_call_failure">Don\'t have permission to call.</string>
+</resources>
