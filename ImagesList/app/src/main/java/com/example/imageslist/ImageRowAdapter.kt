@@ -2,17 +2,13 @@ package com.example.imageslist
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
-import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.image_row.view.*
 import java.lang.ref.WeakReference
-import java.net.URL
 
 
 data class ImageRow(
@@ -92,17 +88,4 @@ class ImageRowAdapter(
 
     override fun onBindViewHolder(holder: ImageRowViewHolder, position: Int) =
         holder.bind(imageRows[position])
-
-
-    fun addBitmap(url: String, position: Int) {
-        with(imageRows[position]) {
-            if (!loaded) {
-                this.bitmap = map[url]
-                loading = false
-                loaded = true
-
-                notifyItemChanged(position)
-            }
-        }
-    }
 }

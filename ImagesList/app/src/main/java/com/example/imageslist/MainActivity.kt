@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     private val receiver: ResponseReceiver = ResponseReceiver()
 
 
-    fun initFragment() {
+    private fun initFragment() {
         val fragmentManager: FragmentManager = supportFragmentManager
         bitmapsSavingFragment =
             fragmentManager.findFragmentByTag(FRAGMENT_TAG) as BitmapsSavingFragment?
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        fun addBitmap(url: String, position: Int) {
+        private fun addBitmap(url: String, position: Int) {
             with(imageRows[position]) {
                 if (!loaded) {
                     bitmap = if (!isMultiLoad){
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        fun markLoaded(position: Int) {
+        private fun markLoaded(position: Int) {
             with(imageRows[position]) {
                 loading = false
 
