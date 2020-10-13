@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/three_navigation"
+    app:startDestination="@+id/buttonFragment3">
+    <fragment
+        android:id="@+id/buttonFragment3"
+        android:name="com.example.fragments.fragments.ButtonFragment"
+        android:label="fragment_button3"
+        tools:layout="@layout/fragment_button" >
+        <argument
+            android:name="number"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_buttonFragment_self"
+            app:destination="@id/buttonFragment3" />
+    </fragment>
+</navigation>
